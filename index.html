@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diwali Party Game Hub — Emoji Cinema Quiz &amp; Name the Price</title>
+  <meta name="description" content="Interactive two-team Diwali party game show featuring a 35-movie Emoji Cinema Quiz (Hollywood, Kollywood, Bollywood &amp; Wildcards) and a 15-item Name the Price challenge." />
+  <meta name="theme-color" content="#E65100" />
+  <meta property="og:title" content="Diwali Party Game Hub — Emoji Cinema Quiz &amp; Name the Price" />
+  <meta property="og:description" content="Host a lively 2-team Diwali game night with Emoji Cinema Quiz and Name the Price, complete with live scoreboards and a 30-second Sparkler Timer." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="diwali-canvas font-sans-clean antialiased p-3 md:p-6 select-none">
+
+  <!-- MASTER FESTIVE FRAME -->
+  <div class="max-w-7xl mx-auto border-2 border-[#E5A93B] diwali-card shadow-md">
+
+    <!-- DECORATIVE MARIGOLD GARLAND (TORAN) TOP STRIP -->
+    <div class="h-2.5 w-full bg-gradient-to-r from-[#FF6700] via-[#FFB800] to-[#FF6700] border-b border-[#E5A93B]"></div>
+
+    <!-- ==================== 1. TOP FESTIVE MASTHEAD & 2-TAB BAR ==================== -->
+    <header class="border-b diwali-border px-5 py-4 flex flex-wrap items-center justify-between gap-4 marigold-banner">
+      <div class="flex items-center gap-4 flex-wrap">
+        <!-- 2 GAME MODE TABS -->
+        <nav aria-label="Game Modes" class="flex items-center flex-wrap bg-[#7F1D00]/35 p-1 border border-[#FFD54F]/60 font-mono-code text-xs">
+          <button id="tabBtnMovies" onclick="switchGameTab('MOVIES')" class="px-4 py-2 font-extrabold uppercase transition bg-[#FFFDF8] text-[#B23C00] shadow-sm">
+            🎬 1. Emoji Cinema Quiz
+          </button>
+          <button id="tabBtnPrice" onclick="switchGameTab('PRICE')" class="px-4 py-2 font-extrabold uppercase transition text-white hover:bg-white/15">
+            🏷️ 2. Name the Price
+          </button>
+        </nav>
+      </div>
+
+      <!-- Telemetry & Master Controls -->
+      <div class="flex items-center gap-2.5 flex-wrap font-mono-code text-xs">
+        <div class="flex items-center gap-3 border border-[#FFD54F] bg-[#FFFDF8] text-[#3B1704] px-3.5 py-1.5 font-bold">
+          <span>OPEN: <strong id="statOpen" class="text-[#D84315]">35</strong></span>
+          <span class="text-[#F2C97D]">|</span>
+          <span>SOLVED: <strong id="statSolved" class="text-[#008272]">00</strong></span>
+          <span class="text-[#F2C97D]">|</span>
+          <span>LOCKED: <strong id="statVoid" class="text-[#B71C1C]">00</strong></span>
+        </div>
+
+        <button onclick="switchTurn()" class="px-3.5 py-1.5 border border-[#FFD54F] bg-[#FFF9DB] text-[#7A3200] hover:bg-[#FFE082] transition uppercase font-extrabold">
+          ⇄ Switch Turn
+        </button>
+
+        <button id="resetMatchBtn" onclick="resetMatch()" class="px-3.5 py-1.5 border border-white/60 bg-[#B23C00] text-white hover:bg-[#7F1D00] transition uppercase font-extrabold">
+          Reset Board
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== 2. 2-TEAM SCOREBOARD (SEPARATE PER TAB) ==================== -->
+    <section aria-label="Team Scoreboard" class="border-b diwali-border">
+      <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-[#F2C97D]">
+
+        <!-- TEAM 1 PANEL (5 COLS) -->
+        <div id="teamPanel0" onclick="setTurn(0)" class="md:col-span-5 p-5 cursor-pointer transition relative flex items-center justify-between">
+          <div id="turnBar0" class="absolute top-0 left-0 right-0 h-1.5 bg-[#FF6700]"></div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2.5 font-mono-code text-xs">
+              <span id="turnBadge0" class="px-2.5 py-0.5 font-extrabold uppercase bg-[#FF6700] text-white border border-[#E65100]">
+                🪔 Active Turn
+              </span>
+              <button onclick="renameTeam(event, 0)" class="diwali-muted hover:text-[#FF6700] font-semibold underline">
+                Edit Name
+              </button>
+            </div>
+            <h2 id="teamName0" class="font-serif-editorial text-2xl md:text-3xl font-bold text-[#3B1704] tracking-tight">
+              Sara Vedi 🧨
+            </h2>
+            <div class="font-mono-code text-xs diwali-muted flex flex-wrap items-center gap-y-1">
+              <span>SOLVED: <span id="teamSolved0" class="text-[#3B1704] font-extrabold">0</span></span>
+              <span>&nbsp;•&nbsp; STREAK: <span id="teamStreak0" class="text-[#FF6700] font-extrabold">0 🔥</span></span>
+              <span id="teamAvgOffWrap0" class="hidden">&nbsp;•&nbsp; AVG % OFF: <span id="teamAvgOff0" class="px-1.5 py-0.5 bg-[#FFF9DB] border border-[#FFB800] text-[#7A3200] font-extrabold">—</span></span>
+            </div>
+          </div>
+
+          <div class="text-right font-mono-code">
+            <div id="teamScore0" class="font-serif-editorial text-4xl md:text-5xl font-bold tracking-tight text-[#D84315]">
+              00
+            </div>
+            <div class="text-xs diwali-muted font-bold uppercase tracking-widest mt-1">Points</div>
+          </div>
+        </div>
+
+        <!-- CENTER STANDINGS MODULE (2 COLS) -->
+        <div class="md:col-span-2 p-4 diwali-subsurface flex flex-col items-center justify-center text-center font-mono-code">
+          <span class="text-xs font-bold uppercase tracking-widest diwali-muted">🎆 Score Lead</span>
+          <div id="matchLeadText" class="text-xs font-extrabold text-[#7A3200] my-2 px-2.5 py-1 border diwali-border diwali-card w-full">
+            Tied Score
+          </div>
+          <!-- Marigold vs Saffron Ratio Bar -->
+          <div class="w-full h-2.5 bg-[#FFE5B4] border border-[#E5A93B] flex overflow-hidden mt-1">
+            <div id="tugBar0" class="h-full bg-[#FF6700] transition-all duration-300" style="width: 50%"></div>
+            <div id="tugBar1" class="h-full bg-[#FFB800] transition-all duration-300" style="width: 50%"></div>
+          </div>
+        </div>
+
+        <!-- TEAM 2 PANEL (5 COLS) -->
+        <div id="teamPanel1" onclick="setTurn(1)" class="md:col-span-5 p-5 cursor-pointer transition relative flex items-center justify-between">
+          <div id="turnBar1" class="absolute top-0 left-0 right-0 h-1.5 bg-transparent"></div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2.5 font-mono-code text-xs">
+              <span id="turnBadge1" class="px-2.5 py-0.5 font-bold uppercase border diwali-border diwali-muted">
+                ○ Waiting
+              </span>
+              <button onclick="renameTeam(event, 1)" class="diwali-muted hover:text-[#FF6700] font-semibold underline">
+                Edit Name
+              </button>
+            </div>
+            <h2 id="teamName1" class="font-serif-editorial text-2xl md:text-3xl font-bold text-[#3B1704] tracking-tight">
+              Pataka 💥
+            </h2>
+            <div class="font-mono-code text-xs diwali-muted flex flex-wrap items-center gap-y-1">
+              <span>SOLVED: <span id="teamSolved1" class="text-[#3B1704] font-extrabold">0</span></span>
+              <span>&nbsp;•&nbsp; STREAK: <span id="teamStreak1" class="text-[#FF6700] font-extrabold">0 🔥</span></span>
+              <span id="teamAvgOffWrap1" class="hidden">&nbsp;•&nbsp; AVG % OFF: <span id="teamAvgOff1" class="px-1.5 py-0.5 bg-[#FFF9DB] border border-[#FFB800] text-[#7A3200] font-extrabold">—</span></span>
+            </div>
+          </div>
+
+          <div class="text-right font-mono-code">
+            <div id="teamScore1" class="font-serif-editorial text-4xl md:text-5xl font-bold tracking-tight text-[#D84315]">
+              00
+            </div>
+            <div class="text-xs diwali-muted font-bold uppercase tracking-widest mt-1">Points</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1 CONTENT: EMOJI CINEMA QUIZ                                          -->
+    <!-- ========================================================================= -->
+    <div id="tabContentMovies">
+
+      <!-- 3A. 4-CATEGORY SELECTION BOARD -->
+      <main id="boardView">
+        <div class="px-5 py-2.5 border-b diwali-border bg-[#FFF2D6] flex flex-wrap items-center justify-between gap-2 font-mono-code text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="text-base">🪔</span>
+            <span class="diwali-muted font-bold">NOW PICKING:</span>
+            <strong id="promptTeamName" class="text-[#B23C00] uppercase font-extrabold">SARA VEDI 🧨</strong>
+            <span class="diwali-muted">— PICK ANY MOVIE REEL FROM THE 4 CATEGORIES BELOW</span>
+          </div>
+          <div class="diwali-muted font-semibold">
+            🌟 +10 PTS PER CORRECT GUESS • ASKED REELS LOCK AUTOMATICALLY
+          </div>
+        </div>
+
+        <div id="categoriesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#F2C97D]">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+
+      <!-- 3B. ACTIVE MOVIE QUESTION VIEW -->
+      <section id="stageView" class="hidden">
+        <div class="px-5 py-3 border-b diwali-border diwali-subsurface flex flex-wrap items-center justify-between gap-3 font-mono-code text-xs">
+          <div class="flex items-center gap-3">
+            <button onclick="abortQuestion()" class="px-3.5 py-1.5 border border-[#E5A93B] diwali-card text-[#3B1704] hover:bg-[#FFE8B8] transition uppercase font-extrabold">
+              ← Back to Board (Keep Unlocked)
+            </button>
+            <span id="stageSlotCode" class="font-extrabold text-[#B23C00] uppercase">CATEGORY 01 // 🎬 REEL #01</span>
+            <span class="text-[#E5A93B]">|</span>
+            <span id="stageIndustryLabel" class="diwali-muted font-bold uppercase">HOLLYWOOD</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="diwali-muted font-bold uppercase">PLAYING TEAM:</span>
+            <span id="stageTeamPill" class="px-3 py-1 font-extrabold bg-[#FF6700] text-white border border-[#E65100] uppercase">
+              SARA VEDI 🧨
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#F2C97D]">
+          <div class="lg:col-span-8 flex flex-col justify-between">
+            <div class="p-8 md:p-12 border-b diwali-border stage-festive-bg flex flex-col items-center justify-center text-center min-h-[260px]">
+              <div class="font-serif-editorial italic text-base text-[#7A3200] mb-4 px-4 py-1 border border-[#E5A93B] bg-[#FFFDF8] font-medium">
+                🪔 Decode the blockbuster movie from the five emojis below 🪔
+              </div>
+              <div id="stageEmojis" class="py-7 px-9 border-2 border-[#FFB800] diwali-card text-5xl sm:text-6xl md:text-7xl tracking-widest leading-none select-all shadow-sm">
+                🚢 🧊 🎻 💔 🌊
+              </div>
+            </div>
+
+            <div class="divide-y divide-[#F2C97D] font-mono-code text-xs">
+              <div class="grid grid-cols-12 items-stretch">
+                <div class="col-span-3 sm:col-span-2 p-4 border-r diwali-border diwali-subsurface text-[#7A3200] uppercase flex items-center text-sm font-extrabold">
+                  💡 Clue
+                </div>
+                <div id="stageHintBox" class="col-span-6 sm:col-span-8 p-4 flex items-center diwali-muted font-sans-clean text-base md:text-lg leading-relaxed">
+                  Clue is hidden — click "Show Clue" or press [H]
+                </div>
+                <div class="col-span-3 sm:col-span-2 p-2.5 border-l diwali-border flex items-center">
+                  <button onclick="toggleHint()" id="hintBtn" class="w-full py-2.5 px-2 border border-[#E5A93B] bg-[#FFF2D6] text-[#7A3200] hover:bg-[#FFE099] font-extrabold transition uppercase">
+                    Show Clue
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 items-stretch">
+                <div class="col-span-3 sm:col-span-2 p-4 border-r diwali-border diwali-subsurface text-[#7A3200] uppercase flex items-center text-sm font-extrabold">
+                  🎬 Answer
+                </div>
+                <div id="stageAnswerBox" class="col-span-6 sm:col-span-8 p-4 flex items-center diwali-muted font-sans-clean text-base">
+                  Answer is hidden — click "Reveal" or press [Space]
+                </div>
+                <div class="col-span-3 sm:col-span-2 p-2.5 border-l diwali-border flex items-center">
+                  <button onclick="toggleAnswer()" id="answerBtn" class="w-full py-2.5 px-2 border border-[#E65100] bg-[#FF6700] text-white font-extrabold hover:bg-[#D84315] transition uppercase">
+                    🎆 Reveal
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 items-stretch">
+                <div class="col-span-3 sm:col-span-2 p-4 border-r diwali-border diwali-subsurface text-[#7A3200] uppercase flex items-center font-bold">
+                  Breakdown
+                </div>
+                <div id="stageBreakdownBox" class="col-span-9 sm:col-span-10 p-4 flex items-center diwali-muted font-sans-clean text-sm md:text-base font-medium">
+                  —
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 flex flex-col justify-between diwali-subsurface font-mono-code">
+            <div class="p-5 border-b diwali-border diwali-card">
+              <div class="flex items-center justify-between text-xs diwali-muted uppercase mb-3 font-bold">
+                <span>⏱️ Sparkler Timer (30s)</span>
+                <span id="clockStatusText" class="font-extrabold text-[#D84315]">Ready</span>
+              </div>
+              <div class="grid grid-cols-12 gap-2.5">
+                <div id="clockDisplay" class="col-span-7 py-3 px-4 border-2 border-[#FFB800] bg-[#FFF9DB] font-serif-editorial text-3xl font-bold text-center text-[#3B1704]">
+                  00:30
+                </div>
+                <button onclick="toggleClock()" id="clockBtn" class="col-span-5 border border-[#E5A93B] bg-[#FFF2D6] text-xs font-extrabold text-[#7A3200] hover:bg-[#FFE099] transition uppercase">
+                  Start / Pause
+                </button>
+              </div>
+            </div>
+
+            <div class="p-5 space-y-3 diwali-card">
+              <div class="text-xs uppercase diwali-muted font-bold leading-relaxed">
+                Award Points &amp; Lock Reel:
+              </div>
+
+              <button onclick="resolveQuestion('ACTIVE')" class="w-full p-3.5 border-2 border-[#008272] bg-[#008272] text-white font-extrabold text-xs uppercase hover:opacity-90 transition flex items-center justify-between shadow-sm">
+                <span id="btnAwardActive">🎉 Sara Vedi Correct (+10)</span>
+                <span>Lock →</span>
+              </button>
+
+              <button onclick="resolveQuestion('STEAL')" class="w-full p-3.5 border-2 border-[#FF6700] bg-[#FFF2D6] text-[#B23C00] font-extrabold text-xs uppercase hover:bg-[#FF6700] hover:text-white transition flex items-center justify-between">
+                <span id="btnAwardSteal">⚡ Steal: Pataka (+10)</span>
+                <span>Lock →</span>
+              </button>
+
+              <button onclick="resolveQuestion('VOID')" class="w-full p-3.5 border border-[#E5A93B] bg-[#FFF8EB] text-[#8C4A19] font-bold text-xs uppercase hover:bg-[#FDE2E2] hover:text-[#9E1C1C] hover:border-[#D32F2F] transition flex items-center justify-between">
+                <span>✕ Unsolved (No Points)</span>
+                <span>Lock →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2 CONTENT: NAME THE PRICE (15 ITEMS WITH PHOTOS)                      -->
+    <!-- ========================================================================= -->
+    <div id="tabContentPrice" class="hidden">
+
+      <!-- PRICE BOARD VIEW (15 ITEM TILES) -->
+      <main id="priceBoardView">
+        <div class="p-6 border-b diwali-border bg-gradient-to-r from-[#FFF0D4] via-[#FFF9DB] to-[#FFF0D4] flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div>
+              <h2 class="font-serif-editorial text-2xl md:text-3xl font-bold text-[#3B1704]">
+                Name the Price 🏷️
+              </h2>
+              <p class="text-xs md:text-sm diwali-muted font-medium mt-0.5">
+                Both teams enter their price guess — closest absolute dollar difference ($ off) wins!
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 font-mono-code text-xs">
+            <!-- Avg % Off Summary Strip -->
+            <div class="px-3.5 py-2 border border-[#E5A93B] bg-[#FFFDF8] flex items-center gap-3">
+              <span class="font-extrabold text-[#7A3200] uppercase">📊 Avg % Off:</span>
+              <span><strong id="boardAvgLabel0" class="text-[#3B1704]">Sara Vedi:</strong> <span id="boardAvgVal0" class="font-extrabold text-[#D84315]">—</span></span>
+              <span class="text-[#E5A93B]">|</span>
+              <span><strong id="boardAvgLabel1" class="text-[#3B1704]">Pataka:</strong> <span id="boardAvgVal1" class="font-extrabold text-[#D84315]">—</span></span>
+            </div>
+
+            <button onclick="pickRandomPriceItem()" class="px-4 py-2.5 border-2 border-[#FF6700] bg-[#FF6700] text-white font-mono-code text-xs font-extrabold uppercase hover:bg-[#D84315] transition shadow-sm flex items-center gap-2">
+              <span>🎲</span> Pick Random Item
+            </button>
+          </div>
+        </div>
+
+        <!-- 15 Items Grid (3x5 on Desktop) -->
+        <div id="priceItemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 border-b diwali-border">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </main>
+
+      <!-- PRICE ITEM STAGE VIEW -->
+      <section id="priceStageView" class="hidden">
+        <div class="px-5 py-3 border-b diwali-border diwali-subsurface flex flex-wrap items-center justify-between gap-3 font-mono-code text-xs">
+          <div class="flex items-center gap-3">
+            <button onclick="abortPriceItem()" class="px-3.5 py-1.5 border border-[#E5A93B] diwali-card text-[#3B1704] hover:bg-[#FFE8B8] transition uppercase font-extrabold">
+              ← Back to All Items (Keep Unlocked)
+            </button>
+            <span id="priceStageBadge" class="font-extrabold text-[#B23C00] uppercase">NAME THE PRICE // ITEM #01 OF 15</span>
+            <span class="text-[#E5A93B]">|</span>
+            <span id="priceStageStore" class="px-2.5 py-0.5 bg-[#FFF9DB] border border-[#FFB800] text-[#7A3200] font-extrabold uppercase">STORE</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="diwali-muted font-bold uppercase">PICKING TEAM:</span>
+            <span id="priceStageTeamPill" class="px-3 py-1 font-extrabold bg-[#FF6700] text-white border border-[#E65100] uppercase">
+              SARA VEDI 🧨
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#F2C97D]">
+
+          <!-- Left 8 Cols: Product Photo, Title, Team Price Inputs & Price Reveal -->
+          <div class="lg:col-span-8 flex flex-col justify-between">
+            <div class="p-6 md:p-8 border-b diwali-border stage-festive-bg flex flex-col items-center justify-center text-center">
+              <!-- Product Photo Frame -->
+              <div class="w-full max-w-md h-60 md:h-64 border-2 border-[#FFB800] bg-white p-3 flex items-center justify-center shadow-sm mb-4 overflow-hidden">
+                <img id="priceStageImg" src="" alt="Product Photo" class="max-h-full max-w-full object-contain" />
+              </div>
+
+              <div id="priceStageStorePill" class="font-mono-code text-xs font-extrabold uppercase tracking-widest text-[#B23C00] mb-2 px-3 py-1 border border-[#E5A93B] bg-[#FFFDF8]">
+                📍 Indian Cash &amp; Carry
+              </div>
+              <h3 id="priceStageTitle" class="font-serif-editorial text-2xl sm:text-3xl font-bold text-[#3B1704] max-w-xl leading-snug">
+                Gopi Whole Yogurt Plain 64oz
+              </h3>
+            </div>
+
+            <!-- Team Guesses & Official Price Reveal Ledger -->
+            <div class="divide-y divide-[#F2C97D] font-mono-code text-xs">
+
+              <!-- 2-Team Price Input Cards -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[#F2C97D] diwali-card">
+                <!-- Team 1 Guess Box -->
+                <div id="guessCard0" class="p-4 space-y-2 transition">
+                  <div class="flex items-center justify-between">
+                    <span id="guessLabel0" class="font-extrabold text-sm text-[#3B1704] uppercase">Sara Vedi 🧨 Guess</span>
+                    <span id="guessBadge0" class="hidden px-2 py-0.5 text-[11px] font-extrabold uppercase"></span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2.5 text-[#8C4A19] font-extrabold text-base">$</span>
+                    <input id="priceGuess0" type="number" step="0.01" min="0" placeholder="Enter price (e.g. 7.99)"
+                      oninput="updateClosestGuess()"
+                      onkeydown="if(event.key==='Enter'){event.preventDefault(); revealPriceAndDecide();}"
+                      class="w-full pl-7 pr-3 py-2 border-2 border-[#E5A93B] bg-[#FFFDF8] font-serif-editorial font-bold text-xl text-[#3B1704] focus:border-[#FF6700] focus:outline-none" />
+                  </div>
+                  <div id="guessStat0" class="text-[11px] diwali-muted font-bold min-h-[16px]">
+                    Enter team's price guess above
+                  </div>
+                </div>
+
+                <!-- Team 2 Guess Box -->
+                <div id="guessCard1" class="p-4 space-y-2 transition">
+                  <div class="flex items-center justify-between">
+                    <span id="guessLabel1" class="font-extrabold text-sm text-[#3B1704] uppercase">Pataka 💥 Guess</span>
+                    <span id="guessBadge1" class="hidden px-2 py-0.5 text-[11px] font-extrabold uppercase"></span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2.5 text-[#8C4A19] font-extrabold text-base">$</span>
+                    <input id="priceGuess1" type="number" step="0.01" min="0" placeholder="Enter price (e.g. 6.49)"
+                      oninput="updateClosestGuess()"
+                      onkeydown="if(event.key==='Enter'){event.preventDefault(); revealPriceAndDecide();}"
+                      class="w-full pl-7 pr-3 py-2 border-2 border-[#E5A93B] bg-[#FFFDF8] font-serif-editorial font-bold text-xl text-[#3B1704] focus:border-[#FF6700] focus:outline-none" />
+                  </div>
+                  <div id="guessStat1" class="text-[11px] diwali-muted font-bold min-h-[16px]">
+                    Enter team's price guess above
+                  </div>
+                </div>
+              </div>
+
+              <!-- Official Price Reveal Row -->
+              <div class="grid grid-cols-12 items-stretch">
+                <div class="col-span-3 sm:col-span-2 p-4 border-r diwali-border diwali-subsurface text-[#7A3200] uppercase flex items-center text-sm font-extrabold">
+                  🏷️ Retail
+                </div>
+                <div id="priceStageAnswerBox" class="col-span-5 sm:col-span-6 p-4 flex items-center justify-between diwali-muted font-sans-clean text-base">
+                  <span>Enter both guesses, then click "Reveal &amp; Decide Winner"</span>
+                </div>
+                <div class="col-span-4 sm:col-span-4 p-2.5 border-l diwali-border flex items-center">
+                  <button onclick="togglePriceAnswer()" id="priceRevealBtn" class="w-full py-3 px-3 border border-[#E65100] bg-[#FF6700] text-white font-extrabold hover:bg-[#D84315] transition uppercase">
+                    🏷️ Reveal &amp; Decide Winner
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 4 Cols: Timer & Auto-Winner Scoring Module -->
+          <div class="lg:col-span-4 flex flex-col justify-between diwali-subsurface font-mono-code">
+
+            <!-- 30s Timer Module -->
+            <div class="p-5 border-b diwali-border diwali-card">
+              <div class="flex items-center justify-between text-xs diwali-muted uppercase mb-3 font-bold">
+                <span>⏱️ Sparkler Timer (30s)</span>
+                <span id="priceClockStatusText" class="font-extrabold text-[#D84315]">Ready</span>
+              </div>
+              <div class="grid grid-cols-12 gap-2.5">
+                <div id="priceClockDisplay" class="col-span-7 py-3 px-4 border-2 border-[#FFB800] bg-[#FFF9DB] font-serif-editorial text-3xl font-bold text-center text-[#3B1704]">
+                  00:30
+                </div>
+                <button onclick="toggleClock()" class="col-span-5 border border-[#E5A93B] bg-[#FFF2D6] text-xs font-extrabold text-[#7A3200] hover:bg-[#FFE099] transition uppercase">
+                  Start / Pause
+                </button>
+              </div>
+            </div>
+
+            <!-- Auto-Decided Winner & Lock Module -->
+            <div class="p-5 space-y-3 diwali-card">
+              <div class="text-xs uppercase diwali-muted font-bold leading-relaxed">
+                1. Decide Winner (Closest $ Diff):
+              </div>
+
+              <!-- Primary Auto-Winner Lock Button -->
+              <button id="btnAutoLockPriceWinner" onclick="lockAutoDecidedPriceWinner()" class="w-full p-4 border-2 border-[#008272] bg-[#008272] text-white font-extrabold text-xs uppercase hover:opacity-95 transition flex items-center justify-between shadow-sm">
+                <span id="btnAutoLockPriceText">🏆 Decide Winner &amp; Lock (+10)</span>
+                <span>Lock →</span>
+              </button>
+
+              <div class="pt-2 border-t border-[#F2C97D] text-[11px] uppercase diwali-muted font-bold">
+                Or Manual Override:
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="resolvePriceItem(0, 10)" class="p-2.5 border border-[#E5A93B] bg-[#FFF9DB] text-[#7A3200] font-extrabold text-[11px] uppercase hover:bg-[#FFE082] transition text-center truncate">
+                  <span id="btnPriceAward0">Sara Vedi (+10)</span>
+                </button>
+                <button onclick="resolvePriceItem(1, 10)" class="p-2.5 border border-[#E5A93B] bg-[#FFF9DB] text-[#7A3200] font-extrabold text-[11px] uppercase hover:bg-[#FFE082] transition text-center truncate">
+                  <span id="btnPriceAward1">Pataka (+10)</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="resolvePriceItem('BOTH', 10)" class="p-2 border border-[#E5A93B] bg-[#FFFDF8] text-[#7A3200] font-bold text-[11px] uppercase hover:bg-[#FFE082] transition text-center">
+                  🤝 Tie (+10 Both)
+                </button>
+                <button onclick="resolvePriceItem('VOID', 0)" class="p-2 border border-[#E5A93B] bg-[#FFF8EB] text-[#8C4A19] font-bold text-[11px] uppercase hover:bg-[#FDE2E2] hover:text-[#9E1C1C] transition text-center">
+                  ✕ Skip (0 Pts)
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ==================== 4. FOOTER ==================== -->
+    <footer class="border-t diwali-border px-5 py-3 diwali-subsurface flex flex-wrap items-center justify-between gap-2 font-mono-code text-xs diwali-muted">
+      <div>
+        SHORTCUTS: <strong class="text-[#3B1704]">[SPACE]</strong> REVEAL ANSWER/PRICE &nbsp;•&nbsp; <strong class="text-[#3B1704]">[H]</strong> SHOW CLUE &nbsp;•&nbsp; <strong class="text-[#3B1704]">[T]</strong> TIMER &nbsp;•&nbsp; <strong class="text-[#3B1704]">[ESC]</strong> BACK TO BOARD
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

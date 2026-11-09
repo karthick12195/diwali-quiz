@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="flame" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FF6700" />
+      <stop offset="55%" stop-color="#FFB800" />
+      <stop offset="100%" stop-color="#FFF59D" />
+    </linearGradient>
+    <linearGradient id="lamp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D84315" />
+      <stop offset="50%" stop-color="#B23C00" />
+      <stop offset="100%" stop-color="#7F1D00" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#FFF8EB" stroke="#E5A93B" stroke-width="3" />
+  <path d="M32 10 C37 19, 41 25, 32 34 C23 25, 27 19, 32 10 Z" fill="url(#flame)" />
+  <ellipse cx="32" cy="27" rx="3.5" ry="5.5" fill="#FFFDE7" />
+  <path d="M12 36 Q32 41 52 36 C50 49, 41 54, 32 54 C23 54, 14 49, 12 36 Z" fill="url(#lamp)" stroke="#FFB800" stroke-width="2" />
+  <path d="M17 42 Q32 46 47 42" fill="none" stroke="#FFD54F" stroke-width="2" stroke-linecap="round" />
+</svg>
